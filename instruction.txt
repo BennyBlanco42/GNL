@@ -1,0 +1,96 @@
+dans le cas ou buffer_size = 5
+
+imagine le fichier fd 3:
+`this is some text
+line 2
+end`
+
+a chaque appel de get_next_line -> on retourne une ligne entiere du fichier (le prochain appel retourne la ligne d'apres)
+c'est quoi une ligne? -> des caracteres a l'infini jusqu'a \n OU \0
+
+fin de fichier: \0
+fin de ligne: \n
+du coup derniere ligne -> fini par \0
+		
+lecture: |buffer|buffer|
+qu'on stocke au fur et a mesure dans temp:
+temp -> |this |is so|me te|xt(\n)li|
+
+Lorsqu'on scan le temp et qu'on trouve (\n OU \0)
+
+lorsqu'on trouve un \n:
+on separe les deux parties en gardant le \n DONC:
+ligne = 1ere partie de temp
+temp = 2eme partie de temp
+ou la section se fait apres le \n 
+
+DU COUP:
+ligne = "this is some text\n"
+temp = "li"
+
+premier appel de GNL retourne LIGNE = "this is some text\n"
+deuxieme appel de GNL:
+
+read with buffer
+temp = "li"|ne 2\n|
+
+line = "line 2\n"
+temp = ""
+
+RETOURNE line.
+
+3eme appel:
+
+temp = ""
+read with buffer
+temp = |end\0
+
+read(fd, char *, buffer_size) retourne un int qui est le nombre de bytes lu 
+
+si on read 5 caracteres, la fonction retourne 5 
+
+si on lit "end\0", read retorune 4 
+
+du coup
+bytes = read(...)
+bytes est egal a 4
+
+les verifs a faire:
+si bytes < 0 -> erreur
+si bytes == 0 -> fin du fichier
+si byte > 0 -> lecture non fini.
+
+
+une variable static: qui ne se reinitialise pas entre les appels de la fonction
+
+
+si on cree:
+static char *temp = NULL;
+
+elle va etrem NULLE que lors de la premiere creation. Apres, elle garde la derniere valeur qui est assignee.
+
+
+
+imaginer le cas ou on a buffer_size = 15
+et lignes lues = |this\nis\na\ntext\0|
+
+temp check LA PREMIERE \n, et coupe dans cet index
+
+donc les appels gnl vont faire:
+
+1:
+READ 15 et stock dans-> temp = |this\nis\na\ntext\0|
+temp = "is\na\ntext\0"
+RETURN line = "this\n"
+
+2:
+temp = "a\ntext\0"
+RETURN line = "is\n"
+
+3:
+temp = "text\0"
+RETURN line = "a\n"
+
+4:
+temp = ""
+RETURN line = "text\0"
