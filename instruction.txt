@@ -67,7 +67,7 @@ une variable static: qui ne se reinitialise pas entre les appels de la fonction
 si on cree:
 static char *temp = NULL;
 
-elle va etrem NULLE que lors de la premiere creation. Apres, elle garde la derniere valeur qui est assignee.
+elle va etre NULLE que lors de la premiere creation. Apres, elle garde la derniere valeur qui est assignee.
 
 
 
