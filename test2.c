@@ -23,7 +23,7 @@ char	*ft_strdup(char *src)
 	int		len_src;
 
 	len_src = ft_strlen(src);
-	dest = (char *) malloc (sizeof (char) * len_src + 1);
+	dest = malloc (sizeof (char) * len_src + 1);
 	if (dest == NULL)
 		return (NULL);
 	i = 0;
@@ -32,6 +32,7 @@ char	*ft_strdup(char *src)
 		dest[i] = src[i];
 		i++;
 	}
+	dest[i] = '\0';
 	return (dest);
 }
 
@@ -46,18 +47,18 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (dest == (NULL))
 		return (NULL);
 	i = 0;
-	while (i <= len)
+	while (i <= ft_strlen(s1))
 	{
 		dest[i] = s1[i];
 		i++;
 	}
 	i = 0;
-	while (i <= len2)
+	while (i <= ft_strlen(s2))
 	{
-		dest[i + len] = s2[i];
+		dest[i + ft_strlen(s1)] = s2[i];
 		i++;
 	}
-	dest[len + len2 + 1] = '\0';
+	dest[ft_strlen(s1) + ft_strlen(s2) + 1] = '\0';
 	free(s1);
 	free(s2);
 	return (dest);
@@ -69,7 +70,6 @@ char	*buildstash(char *stash, char *buffer)
 	char *temp;
 
 	temp = ft_strdup(stash);
-	//free(stash);
 	stash = ft_strjoin(temp, buffer);
 	return (stash);
 

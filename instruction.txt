@@ -94,3 +94,14 @@ RETURN line = "a\n"
 4:
 temp = ""
 RETURN line = "text\0"
+
+
+fonction qui deplace ce qu'il y'a dans buffer dans la stash apres chaque read.
+=> ft_build_stash.
+
+
+
+fonction scan stash=> si  presence d4un retour a la ligne => 
+on met tt ce qu'il y'a avant le \n dans la stash dans next line et on return get_next_line
+=> ft_scan_stash
+
