@@ -6,14 +6,11 @@
 /*   By: bchanteu <bchanteu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:00:19 by bchanteu          #+#    #+#             */
-/*   Updated: 2025/08/06 17:55:02 by bchanteu         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:35:52 by bchanteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// strchr => pour chercher dans la resevre si il y'a un \n 
-// strdup => malloc ?
 #include "get_next_line.h"
-
 
 int	ft_strlen(char *s1)
 {	
@@ -34,7 +31,7 @@ char	*ft_strdup(char *src)
 	int		len_src;
 
 	len_src = ft_strlen(src);
-	dest = malloc (sizeof (char) * len_src + 1);
+	dest = malloc (sizeof (char) * (len_src + 1));
 	if (dest == NULL)
 		return (NULL);
 	i = 0;
@@ -50,26 +47,25 @@ char	*ft_strdup(char *src)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
-	int		len;
-	int		len2;
+	int		j;
 	char	*dest;
 
 	dest = (char *)malloc(sizeof (char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (dest == (NULL))
 		return (NULL);
 	i = 0;
-	while (i <= ft_strlen(s1))
+	while (i < ft_strlen(s1))
 	{
 		dest[i] = s1[i];
 		i++;
 	}
-	i = 0;
-	while (i <= ft_strlen(s2))
+	j = 0;
+	while (j < ft_strlen(s2))
 	{
-		dest[i + ft_strlen(s1)] = s2[i];
-		i++;
+		dest[j + ft_strlen(s1)] = s2[j];
+		j++;
 	}
-	dest[ft_strlen(s1) + ft_strlen(s2) + 1] = '\0';
+	dest[i + j] = '\0';
 	return (dest);
 }
 
@@ -77,17 +73,19 @@ char	*ft_strjoin(char *s1, char *s2)
 char	*buildstash(char *stash, char *buffer)
 {
 	char *temp;
+	if (buffer == NULL)
+		return (NULL);
 	if (stash == NULL)
 	{
-		stash = ft_strdup(buffer);
+		return(ft_strdup(buffer));
 	}
 	temp = ft_strdup(stash);
+	free(stash);
+	if (temp == NULL)
+		return (NULL);
 	stash = ft_strjoin(temp, buffer);
 	free(temp);
-	free(buffer);
 	return (stash);
 
 	
 }
-
-//besoin d4un fct qui seprqre stash a partir du \n
