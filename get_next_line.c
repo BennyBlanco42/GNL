@@ -6,7 +6,7 @@
 /*   By: bchanteu <bchanteu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:28:04 by bchanteu          #+#    #+#             */
-/*   Updated: 2025/08/07 18:35:42 by bchanteu         ###   ########.fr       */
+/*   Updated: 2025/08/08 13:14:16 by bchanteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 char	*sepstash(char *stash)
 {
-	int	i;
-	int	j;
 	char	*new_stash;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (stash[i] && stash[i] != '\n')
@@ -38,10 +38,12 @@ char	*sepstash(char *stash)
 	free(stash);
 	return (new_stash);
 }
+
 int	ft_scansatash(char *stash)
 {
 	int	lenstash;
 	int	i;
+
 	if (stash == NULL)
 		return (0);
 	lenstash = ft_strlen(stash);
@@ -53,14 +55,14 @@ int	ft_scansatash(char *stash)
 			return (1);
 		}
 	}
-	return(0);
+	return (0);
 }
 
-char *extract_line(char *stash)
+char	*extract_line(char *stash)
 {
-	int	i;
 	char	*line;
-		
+	int		i;
+
 	i = 0;
 	if (stash == NULL)
 		return (NULL);
@@ -80,62 +82,55 @@ char *extract_line(char *stash)
 	line[i] = '\0';
 	return (line);
 }
+
 char	*get_next_line(int fd)
 {
-    static char *stash = NULL;
-    char	*buffer;
-    char	*line;
-    int		bytes;
+	static char	*stash = NULL;
+	char		*buffer;
+	char		*line;
+	int			bytes;
 
-    if (fd == -1)
-        return (NULL);
-
-    bytes = 1;
-    buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-    if (!buffer)
-        return (NULL);
-
-    while (!ft_scansatash(stash) && bytes != 0)
-    {
-        bytes = read(fd, buffer, BUFFER_SIZE);
-        if (bytes < 0)
-        {
-            free(buffer);
-            return (NULL);
-        }
-        buffer[bytes] = '\0';
-        stash = buildstash(stash, buffer);
-    }
-    free(buffer);
-
-    if (!stash || stash[0] == '\0')
-        return (NULL);
-
-    line = extract_line(stash);
-    stash = sepstash(stash);
-
-    return (line);
+	if (fd == -1)
+		return (NULL);
+	bytes = 1;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
+	while (!ft_scansatash(stash) && bytes != 0)
+	{
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes < 0)
+			return (free(buffer), NULL);
+		buffer[bytes] = '\0';
+		stash = buildstash(stash, buffer);
+	}
+	free(buffer);
+	if (!stash || stash[0] == '\0')
+		return (NULL);
+	line = extract_line(stash);
+	stash = sepstash(stash);
+	return (line);
 }
 
-int main(void)
-{
-    int     fd;
-    char    *next_line;
+// int main(void)
+// {
+//     int     fd;
+//     char    *next_line;
 
-    fd = open("files/test.txt", O_RDONLY);
-    if (fd == -1)
-    {
-        perror("open");
-        return (1);
-    }
+//     fd = open("files/test.txt", O_RDONLY);
+//     if (fd == -1)
+//     {
+//         perror("open");
+//         return (1);
+//     }
 
-    while ((next_line = get_next_line(fd)) != NULL)
-    {
-        printf("|S|%s|E|\n", next_line);
-        free(next_line);
-    }
+//     while ((next_line = get_next_line(fd)) != NULL)
+//     {
+//         printf("|S|%s|E|\n", next_line);
+//         free(next_line);
+//     }
 
-    printf("EOF\n");
-    close(fd);
-    return (0);
-}
+//     printf("EOF\n");
+//     close(fd);
+//     return (0);
+// }

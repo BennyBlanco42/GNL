@@ -6,7 +6,7 @@
 /*   By: bchanteu <bchanteu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 16:59:55 by bchanteu          #+#    #+#             */
-/*   Updated: 2025/08/07 18:36:05 by bchanteu         ###   ########.fr       */
+/*   Updated: 2025/08/08 13:15:51 by bchanteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 char	*get_next_line(int fd);
 char	*buildstash(char *stash, char *buffer);
-int 	ft_strlen(char *s1);
+int		ft_strlen(char *s1);
 char	*ft_strdup(char *src);
 char	*ft_strjoin(char *s1, char *s2);
 int		ft_scansatash(char *stash);

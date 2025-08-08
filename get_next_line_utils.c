@@ -6,7 +6,7 @@
 /*   By: bchanteu <bchanteu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:00:19 by bchanteu          #+#    #+#             */
-/*   Updated: 2025/08/07 18:35:52 by bchanteu         ###   ########.fr       */
+/*   Updated: 2025/08/08 13:15:34 by bchanteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (dest);
 }
 
-
 char	*buildstash(char *stash, char *buffer)
 {
-	char *temp;
+	char	*temp;
+
 	if (buffer == NULL)
 		return (NULL);
 	if (stash == NULL)
 	{
-		return(ft_strdup(buffer));
+		return (ft_strdup(buffer));
 	}
 	temp = ft_strdup(stash);
 	free(stash);
@@ -86,6 +86,4 @@ char	*buildstash(char *stash, char *buffer)
 	stash = ft_strjoin(temp, buffer);
 	free(temp);
 	return (stash);
-
-	
 }
