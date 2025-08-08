@@ -6,7 +6,7 @@
 /*   By: bchanteu <bchanteu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:28:04 by bchanteu          #+#    #+#             */
-/*   Updated: 2025/08/08 13:14:16 by bchanteu         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:07:31 by bchanteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include "get_next_line.h"
+
+void	free_all(char *buffer, char **stash, char *line, int toggle)
+{
+	if (buffer)
+		free(buffer);
+	buffer = NULL;
+	if (*stash)
+		free(*stash);
+	*stash = NULL;
+	if (toggle == 1)
+		return ;
+	if (line)
+		free(line);
+	line = NULL;
+}
 
 char	*sepstash(char *stash)
 {
@@ -26,10 +41,10 @@ char	*sepstash(char *stash)
 	while (stash[i] && stash[i] != '\n')
 		i++;
 	if (stash[i] == '\0')
-		return (NULL);
+		return (free(stash), NULL);
 	new_stash = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
 	if (!new_stash)
-		return (NULL);
+		return (free(stash), NULL);
 	i++;
 	j = 0;
 	while (stash[i])
@@ -79,6 +94,8 @@ char	*extract_line(char *stash)
 		line[i] = stash[i];
 		i++;
 	}
+	if (stash[i] == '\n')
+		line[i++] = '\n';
 	line[i] = '\0';
 	return (line);
 }
@@ -90,47 +107,47 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			bytes;
 
+	line = NULL;
 	if (fd == -1)
 		return (NULL);
 	bytes = 1;
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-		return (NULL);
+		return (free_all(buffer, &stash, line, 0), NULL);
 	while (!ft_scansatash(stash) && bytes != 0)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
-			return (free(buffer), NULL);
+			return (free_all(buffer, &stash, line, 0), NULL);
 		buffer[bytes] = '\0';
 		stash = buildstash(stash, buffer);
 	}
-	free(buffer);
 	if (!stash || stash[0] == '\0')
-		return (NULL);
+		return (free_all(buffer, &stash, line, 1), NULL);
 	line = extract_line(stash);
 	stash = sepstash(stash);
-	return (line);
+	return (free(buffer), line);
 }
 
-// int main(void)
-// {
-//     int     fd;
-//     char    *next_line;
+int main(void)
+{
+    int     fd;
+    char    *next_line;
 
-//     fd = open("files/test.txt", O_RDONLY);
-//     if (fd == -1)
-//     {
-//         perror("open");
-//         return (1);
-//     }
+    fd = open("test.txt", O_RDONLY);
+    if (fd == -1)
+    {
+        perror("open");
+        return (1);
+    }
 
-//     while ((next_line = get_next_line(fd)) != NULL)
-//     {
-//         printf("|S|%s|E|\n", next_line);
-//         free(next_line);
-//     }
-
-//     printf("EOF\n");
-//     close(fd);
-//     return (0);
-// }
+    while ((next_line = get_next_line(fd)) != NULL)
+    {
+        printf("|S|%s|E|\n", next_line);
+        free(next_line);
+    }
+	free(next_line);
+    printf("EOF\n");
+    close(fd);
+    return (0);
+}
